@@ -2,14 +2,14 @@ import { About, Blog, Gallery, Home, Newsletter, Person, Social, Work } from "@/
 import { Line, Logo, Row, Text } from "@once-ui-system/core";
 
 const person: Person = {
-  firstName: "Selene",
-  lastName: "Yu",
-  name: `Selene Yu`,
-  role: "Design Engineer",
+  firstName: "yu",
+  lastName: "zhou",
+  name: `Joey Zhou`,
+  role: "FullStack Engineer",
   avatar: "/images/avatar.jpg",
-  email: "example@gmail.com",
-  location: "Asia/Jakarta", // Expecting the IANA time zone identifier, e.g., 'Europe/Vienna'
-  languages: ["English", "Bahasa"], // optional: Leave the array empty if you don't want to display languages
+  email: "joeyzhouaus@gmail.com",
+  location: "Australia/Melbourne", // Expecting the IANA time zone identifier, e.g., 'Europe/Vienna'
+  languages: ["English", "Mandarin"], // optional: Leave the array empty if you don't want to display languages
 };
 
 const newsletter: Newsletter = {
@@ -98,9 +98,7 @@ const about: About = {
     title: "Introduction",
     description: (
       <>
-        Selene is a Jakarta-based design engineer with a passion for transforming complex challenges
-        into simple, elegant design solutions. Her work spans digital interfaces, interactive
-        experiences, and the convergence of design and technology.
+      A Multi-skilled full Stack Software Developer with 4 years Telco experiences which supported millions of subscribers under clients like TPG mobile, Lebara, Kogan mobile, who is specialising in Web Development across frontend, backend and database.With extensive quality assurance experiences including manual testing and also automated testing which ensure high quality of products. Extensive experience across requirements gathering, design, implementation, testing in full Software Development Life Cycle using Agile Methodology.
       </>
     ),
   },
@@ -109,17 +107,27 @@ const about: About = {
     title: "Work Experience",
     experiences: [
       {
-        company: "FLY",
+        company: "PEXA",
         timeframe: "2022 - Present",
         role: "Senior Design Engineer",
         achievements: [
           <>
-            Redesigned the UI/UX for the FLY platform, resulting in a 20% increase in user
-            engagement and 30% faster load times.
+            Developed features for the PEXA core exchange app, which streamlined digital property settlement processes across various jurisdictions in Australia, making transactions smoother for users.
           </>,
           <>
-            Spearheaded the integration of AI tools into design workflows, enabling designers to
-            iterate 50% faster.
+            Built APIs for containerised applications in Spring Boot using Java and Kotlin, helping clients integrate our API to enhance their banking systems and achieve a fully streamlined digital settlement experience.
+          </>,
+          <>
+          Enhanced support for internal teams by developing new features on developer portals and facilitating API gateway migrations using Kong gateway, which significantly improved overall system efficiency.
+          </>,
+          <>
+          Collaborated with lead engineers on the migration project to the Kong gateway, ensuring a seamless transition that boosted API performance and reliability.
+          </>,
+          <>
+          Conducted extensive automation testing using specialised scripts, which validated the migration's efficacy and led to a remarkably high success rate, ultimately enhancing system reliability.
+          </>,
+          <>
+          Mentored and supervised junior team members, fostering their professional growth and development, which strengthened our team's capabilities and overall performance.
           </>,
         ],
         images: [
@@ -132,22 +140,6 @@ const about: About = {
           },
         ],
       },
-      {
-        company: "Creativ3",
-        timeframe: "2018 - 2022",
-        role: "Lead Designer",
-        achievements: [
-          <>
-            Developed a design system that unified the brand across multiple platforms, improving
-            design consistency by 40%.
-          </>,
-          <>
-            Led a cross-functional team to launch a new product line, contributing to a 15% increase
-            in overall company revenue.
-          </>,
-        ],
-        images: [],
-      },
     ],
   },
   studies: {
@@ -155,17 +147,13 @@ const about: About = {
     title: "Studies",
     institutions: [
       {
-        name: "University of Jakarta",
-        description: <>Studied software engineering.</>,
-      },
-      {
-        name: "Build the Future",
-        description: <>Studied online marketing and personal branding.</>,
+        name: "University of South Australia",
+        description: <>Studied Computer Science.</>,
       },
     ],
   },
   technical: {
-    display: true, // set to false to hide this section
+    display: false, // set to false to hide this section
     title: "Technical skills",
     skills: [
       {
@@ -223,7 +211,7 @@ const about: About = {
             height: 9,
           },
         ],
-      },  
+      },
     ],
   },
 };
