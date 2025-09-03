@@ -5,9 +5,8 @@ import { Button, Flex, Text, Input } from '@once-ui-system/core';
 
 interface Message {
   id: string;
-  text: string;
-  sender: 'user' | 'ai';
-  timestamp: Date;
+  role: 'user' | 'assistant';
+  content: string;
 }
 
 export function ChatWidget() {
@@ -15,13 +14,12 @@ export function ChatWidget() {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
-      text: "Hello! I'm your AI assistant. How can I help you today?",
-      sender: 'ai',
-      timestamp: new Date()
+      role: 'assistant',
+      content: "Hello! I'm Joey's AI assistant. I can help you learn about his background, skills, and projects. What would you like to know?"
     }
   ]);
-  const [inputText, setInputText] = useState('');
-  const [isTyping, setIsTyping] = useState(false);
+  const [input, setInput] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -32,57 +30,81 @@ export function ChatWidget() {
     scrollToBottom();
   }, [messages]);
 
-  const handleSendMessage = async () => {
-    if (!inputText.trim()) return;
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!input.trim() || isLoading) return;
 
     const userMessage: Message = {
       id: Date.now().toString(),
-      text: inputText,
-      sender: 'user',
-      timestamp: new Date()
+      role: 'user',
+      content: input
     };
 
     setMessages(prev => [...prev, userMessage]);
-    setInputText('');
-    setIsTyping(true);
+    setInput('');
+    setIsLoading(true);
 
-    setTimeout(() => {
-      const aiResponse: Message = {
+    try {
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          messages: [...messages, userMessage].map(m => ({ role: m.role, content: m.content }))
+        })
+      });
+
+      if (!response.ok) throw new Error('Failed to send message');
+
+      const reader = response.body?.getReader();
+      if (!reader) throw new Error('No response body');
+
+      let assistantMessage = '';
+      const assistantId = (Date.now() + 1).toString();
+
+      setMessages(prev => [...prev, { id: assistantId, role: 'assistant', content: '' }]);
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        const chunk = new TextDecoder().decode(value);
+        const lines = chunk.split('\n');
+
+        for (const line of lines) {
+          if (line.startsWith('data: ')) {
+            const data = line.slice(6);
+            if (data === '[DONE]') break;
+
+            try {
+              const parsed = JSON.parse(data);
+              if (parsed.type === 'text-delta') {
+                assistantMessage += parsed.delta;
+                setMessages(prev => prev.map(m => 
+                  m.id === assistantId ? { ...m, content: assistantMessage } : m
+                ));
+              }
+            } catch (e) {
+              // Ignore parsing errors
+            }
+          }
+        }
+      }
+    } catch (error) {
+      console.error('Chat error:', error);
+      setMessages(prev => [...prev, {
         id: (Date.now() + 1).toString(),
-        text: generateAIResponse(inputText),
-        sender: 'ai',
-        timestamp: new Date()
-      };
-      setMessages(prev => [...prev, aiResponse]);
-      setIsTyping(false);
-    }, 1000 + Math.random() * 2000);
-  };
-
-  const generateAIResponse = (userInput: string): string => {
-    const responses = [
-      "That's a great question! Let me think about that for you.",
-      "I understand what you're asking. Here's what I can help you with...",
-      "Thanks for reaching out! I'm here to assist you with any questions.",
-      "I'd be happy to help you with that. Let me provide some information.",
-      "That's an interesting point. Based on what you've shared, I'd suggest...",
-      "I can definitely help you with that. Here are a few options to consider.",
-    ];
-    
-    if (userInput.toLowerCase().includes('hello') || userInput.toLowerCase().includes('hi')) {
-      return "Hello there! Welcome! How can I assist you today?";
+        role: 'assistant',
+        content: 'Sorry, I encountered an error. Please try again.'
+      }]);
+    } finally {
+      setIsLoading(false);
     }
-    
-    if (userInput.toLowerCase().includes('help')) {
-      return "I'm here to help! You can ask me questions about our services, get support, or just have a conversation. What would you like to know?";
-    }
-    
-    return responses[Math.floor(Math.random() * responses.length)];
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
-      handleSendMessage();
+      handleSubmit(e as any);
     }
   };
 
@@ -129,7 +151,7 @@ export function ChatWidget() {
             }}
           >
             <Flex gap="8" style={{ display: 'flex', alignItems: 'center' }}>
-              <Text variant="body-default-s" onBackground="brand-medium">🤖 AI Assistant</Text>
+              <Text variant="body-default-s" onBackground="brand-medium">🤖 Joey's AI Assistant</Text>
             </Flex>
             <Button
               onClick={() => setIsOpen(false)}
@@ -149,27 +171,27 @@ export function ChatWidget() {
                     key={message.id}
                     style={{ 
                       display: 'flex',
-                      justifyContent: message.sender === 'user' ? 'flex-end' : 'flex-start'
+                      justifyContent: message.role === 'user' ? 'flex-end' : 'flex-start'
                     }}
                   >
                     <Flex
                       direction="column"
                       padding="s"
                       radius="m"
-                      background={message.sender === 'user' ? 'brand-medium' : 'neutral-weak'}
+                      background={message.role === 'user' ? 'brand-medium' : 'neutral-weak'}
                       style={{ maxWidth: '70%' }}
                     >
                       <Text
                         variant="body-default-xs"
-                        onBackground={message.sender === 'user' ? 'brand-medium' : 'neutral-weak'}
+                        onBackground={message.role === 'user' ? 'brand-medium' : 'neutral-weak'}
                       >
-                        {message.text}
+                        {message.content}
                       </Text>
                     </Flex>
                   </Flex>
                 ))}
                 
-                {isTyping && (
+                {isLoading && (
                   <Flex style={{ display: 'flex', justifyContent: 'flex-start' }}>
                     <Flex
                       padding="s"
@@ -178,7 +200,7 @@ export function ChatWidget() {
                       style={{ display: 'flex', alignItems: 'center' }}
                     >
                       <Text variant="body-default-xs" onBackground="neutral-weak">
-                        Typing...
+                        Thinking...
                       </Text>
                     </Flex>
                   </Flex>
@@ -187,25 +209,27 @@ export function ChatWidget() {
               </Flex>
             </div>
 
-            <Flex gap="s" style={{ display: 'flex', alignItems: 'center' }}>
-              <Input
-                id="chat-input"
-                value={inputText}
-                onChange={(e) => setInputText(e.target.value)}
-                onKeyPress={handleKeyPress}
-                placeholder="Type your message..."
-                disabled={isTyping}
-                style={{ flex: 1 }}
-              />
-              <Button
-                onClick={handleSendMessage}
-                disabled={!inputText.trim() || isTyping}
-                variant="primary"
-                size="s"
-              >
-                ➤
-              </Button>
-            </Flex>
+            <form onSubmit={handleSubmit}>
+              <Flex gap="s" style={{ display: 'flex', alignItems: 'center' }}>
+                <Input
+                  id="chat-input"
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  onKeyPress={handleKeyPress}
+                  placeholder="Ask about Joey's work..."
+                  disabled={isLoading}
+                  style={{ flex: 1 }}
+                />
+                <Button
+                  type="submit"
+                  disabled={!input.trim() || isLoading}
+                  variant="primary"
+                  size="s"
+                >
+                  ➤
+                </Button>
+              </Flex>
+            </form>
           </Flex>
         </Flex>
       )}
