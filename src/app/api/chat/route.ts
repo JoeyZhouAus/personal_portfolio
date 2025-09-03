@@ -1,5 +1,5 @@
 import { createResource } from '@/lib/actions/resources';
-import { openai } from '@ai-sdk/openai';
+import { createOpenAI } from '@ai-sdk/openai';
 import {
   streamText,
   tool,
@@ -12,6 +12,9 @@ export const maxDuration = 30;
 
 export async function POST(req: Request) {
   try {
+    const openai = createOpenAI({
+      apiKey: process.env.OPENAI_API_KEY,
+    });
 
     const body = await req.json();
     const { messages } = body;
@@ -26,9 +29,7 @@ export async function POST(req: Request) {
     }));
 
     const result = streamText({
-      model: openai('gpt-4o', {
-        apiKey: process.env.OPENAI_API_KEY,
-      }),
+      model: openai('gpt-4o'),
       messages: modelMessages,
       stopWhen: stepCountIs(5),
       system: `You are a helpful assistant for Joey Zhou's portfolio website. You can help visitors learn about Joey's background, skills, projects, and experience.
