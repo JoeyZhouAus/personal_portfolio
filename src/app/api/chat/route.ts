@@ -25,7 +25,9 @@ export async function POST(req: Request) {
     }));
 
     const result = streamText({
-      model: openai('gpt-4o'),
+      model: openai('gpt-4o', {
+        apiKey: process.env.OPENAI_API_KEY,
+      }),
       messages: modelMessages,
       stopWhen: stepCountIs(5),
       system: `You are a helpful assistant for Joey Zhou's portfolio website. You can help visitors learn about Joey's background, skills, projects, and experience.
