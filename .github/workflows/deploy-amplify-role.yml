@@ -23,9 +23,127 @@ jobs:
         aws-region: ap-southeast-2
 
     - name: Trigger Amplify Build
+      id: trigger-build
       run: |
-        aws amplify start-job \
-          --app-id d2tmeeiuqjkvzh \
-          --branch-name ${{ github.event.inputs.branch }} \
+        APP_ID="d2tmeeiuqjkvzh"
+        BRANCH="${{ github.event.inputs.branch }}"
+        
+        echo "🚀 Starting Amplify build..."
+        JOB_ID=$(aws amplify start-job \
+          --app-id $APP_ID \
+          --branch-name $BRANCH \
           --job-type RELEASE \
-          --commit-message "Triggered from GitHub Actions"
+          --commit-message "Triggered from GitHub Actions" \
+          --query 'jobSummary.jobId' \
+          --output text)
+        
+        echo "job-id=$JOB_ID" >> $GITHUB_OUTPUT
+        echo "✅ Build started with Job ID: $JOB_ID"
+
+    - name: Wait for Build Completion
+      id: wait-build
+      run: |
+        APP_ID="d2tmeeiuqjkvzh"
+        BRANCH="${{ github.event.inputs.branch }}"
+        JOB_ID="${{ steps.trigger-build.outputs.job-id }}"
+        
+        echo "⏳ Waiting for build to complete..."
+        
+        # Wait up to 20 minutes (1200 seconds)
+        TIMEOUT=1200
+        ELAPSED=0
+        
+        while [ $ELAPSED -lt $TIMEOUT ]; do
+          STATUS=$(aws amplify get-job \
+            --app-id $APP_ID \
+            --branch-name $BRANCH \
+            --job-id $JOB_ID \
+            --query 'job.summary.status' \
+            --output text)
+          
+          echo "⏱️  Status: $STATUS (${ELAPSED}s elapsed)"
+          
+          case $STATUS in
+            "SUCCEED")
+              echo "✅ Build completed successfully!"
+              echo "status=success" >> $GITHUB_OUTPUT
+              exit 0
+              ;;
+            "FAILED"|"CANCELLED")
+              echo "❌ Build failed with status: $STATUS"
+              echo "status=failed" >> $GITHUB_OUTPUT
+              
+              # Get build logs for debugging
+              echo "📋 Build logs:"
+              aws amplify get-job \
+                --app-id $APP_ID \
+                --branch-name $BRANCH \
+                --job-id $JOB_ID \
+                --query 'job.steps[].logUrl' \
+                --output table
+              
+              exit 1
+              ;;
+            "PENDING"|"PROVISIONING"|"RUNNING")
+              echo "🔄 Build in progress..."
+              ;;
+            *)
+              echo "⚠️  Unknown status: $STATUS"
+              ;;
+          esac
+          
+          sleep 30
+          ELAPSED=$((ELAPSED + 30))
+        done
+        
+        echo "⏰ Build timed out after ${TIMEOUT} seconds"
+        echo "status=timeout" >> $GITHUB_OUTPUT
+        exit 1
+
+    - name: Get Deployment Info
+      if: steps.wait-build.outputs.status == 'success'
+      run: |
+        APP_ID="d2tmeeiuqjkvzh"
+        BRANCH="${{ github.event.inputs.branch }}"
+        JOB_ID="${{ steps.trigger-build.outputs.job-id }}"
+        
+        echo "🌐 Deployment Information:"
+        
+        # Get app domain
+        DOMAIN=$(aws amplify get-app \
+          --app-id $APP_ID \
+          --query 'app.defaultDomain' \
+          --output text)
+        
+        # Get branch URL
+        if [ "$BRANCH" = "main" ]; then
+          URL="https://$DOMAIN"
+        else
+          URL="https://$BRANCH.$DOMAIN"
+        fi
+        
+        echo "🔗 Live URL: $URL"
+        echo "📊 Job ID: $JOB_ID"
+        echo "🌿 Branch: $BRANCH"
+        
+        # Get build duration
+        aws amplify get-job \
+          --app-id $APP_ID \
+          --branch-name $BRANCH \
+          --job-id $JOB_ID \
+          --query 'job.summary.{StartTime:startTime,EndTime:endTime}' \
+          --output table
+
+    - name: Build Failed
+      if: steps.wait-build.outputs.status == 'failed'
+      run: |
+        echo "💥 Amplify build failed!"
+        echo "Check the Amplify console for detailed logs: https://ap-southeast-2.console.aws.amazon.com/amplify/home?region=ap-southeast-2#/d2tmeeiuqjkvzh"
+        exit 1
+
+    - name: Build Timeout
+      if: steps.wait-build.outputs.status == 'timeout'
+      run: |
+        echo "⏰ Build timed out - check Amplify console for status"
+        echo "Console: https://ap-southeast-2.console.aws.amazon.com/amplify/home?region=ap-southeast-2#/d2tmeeiuqjkvzh"
+        exit 1
