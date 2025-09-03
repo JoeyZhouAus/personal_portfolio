@@ -13,7 +13,8 @@ import {
   RevealFx,
   SpacingToken,
 } from "@once-ui-system/core";
-import { Footer, Header, RouteGuard, Providers, ChatWidget } from "@/components";
+import { Footer, Header, RouteGuard, Providers } from "@/components";
+import ChatWidgetClient from "@/components/ChatWidgetClient";
 import { baseURL, effects, fonts, style, dataStyle, home } from "@/resources";
 
 export async function generateMetadata() {
@@ -163,7 +164,7 @@ export default async function RootLayout({
             </Flex>
           </Flex>
           <Footer />
-          <ChatWidget />
+          <ChatWidgetClient />
         </Column>
       </Providers>
     </Flex>

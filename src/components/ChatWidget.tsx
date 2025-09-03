@@ -12,7 +12,6 @@ interface Message {
 
 export function ChatWidget() {
   const [isOpen, setIsOpen] = useState(false);
-  const [isClient, setIsClient] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
@@ -25,10 +24,6 @@ export function ChatWidget() {
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
@@ -36,10 +31,6 @@ export function ChatWidget() {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
-
-  if (!isClient) {
-    return null;
-  }
 
   const handleSendMessage = async () => {
     if (!inputText.trim()) return;
