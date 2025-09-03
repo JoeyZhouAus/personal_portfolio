@@ -1,12 +1,14 @@
 import { embed, embedMany } from 'ai';
-import { openai } from '@ai-sdk/openai';
+import { createOpenAI } from '@ai-sdk/openai';
 import { db } from '../db';
 import { cosineDistance, desc, gt, sql } from 'drizzle-orm';
 import { embeddings } from '../db/schema/embeddings';
 
-const embeddingModel = openai.embedding('text-embedding-ada-002', {
+const openai = createOpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
+
+const embeddingModel = openai.embedding('text-embedding-ada-002');
 
 const generateChunks = (input: string): string[] => {
   return input
