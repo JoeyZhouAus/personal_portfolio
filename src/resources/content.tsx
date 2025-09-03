@@ -44,30 +44,24 @@ const home: Home = {
   label: "Home",
   title: `${person.name}'s Portfolio`,
   description: `Portfolio website showcasing my work as a ${person.role}`,
-  headline: <>Building bridges between design and code</>,
+  headline: <>Building scalable solutions in the cloud</>,
   featured: {
     display: true,
     title: (
       <Row gap="12" vertical="center">
-        <strong className="ml-4">Once UI</strong>{" "}
+        <strong className="ml-4">PEXA</strong>{" "}
         <Line background="brand-alpha-strong" vert height="20" />
         <Text marginRight="4" onBackground="brand-medium">
-          Featured work
+          Current Role
         </Text>
       </Row>
     ),
-    href: "/work/building-once-ui-a-customizable-design-system",
+    href: "/work",
   },
   subline: (
     <>
-      I'm Selene, a design engineer at{" "}
-      <Logo
-        dark
-        icon="/trademarks/wordmark-dark.svg"
-        style={{ display: "inline-flex", top: "0.25em", marginLeft: "-0.25em" }}
-      />
-      , where I craft intuitive
-      <br /> user experiences. After hours, I build my own projects.
+      I'm Joey, a software engineer with 8+ years of experience in the real estate industry,
+      <br /> specializing in property settlement, API development, and AWS cloud solutions.
     </>
   ),
 };
@@ -93,7 +87,7 @@ const about: About = {
     title: "Introduction",
     description: (
       <>
-      A Multi-skilled full Stack Software Developer with 4 years Telco experiences which supported millions of subscribers under clients like TPG mobile, Lebara, Kogan mobile, who is specialising in Web Development across frontend, backend and database.With extensive quality assurance experiences including manual testing and also automated testing which ensure high quality of products. Extensive experience across requirements gathering, design, implementation, testing in full Software Development Life Cycle using Agile Methodology.
+        Skilled software engineer with 8 years of experience focused on the real estate industry, specialising in property rental, mortgage origination, and property settlement. Contributed to solution design and development while ensuring high-quality assurance across frontend, backend, and databases. Expertise in API development within an AWS cloud-native environment, utilising CI/CD and Docker for scalable and reliable applications, which improves deployment efficiency and system performance.
       </>
     ),
   },
@@ -200,64 +194,59 @@ const about: About = {
     ],
   },
   technical: {
-    display: false, // set to false to hide this section
-    title: "Technical skills",
+    display: true,
+    title: "Technical Skills",
     skills: [
       {
-        title: "Figma",
+        title: "Backend Development",
         description: (
-          <>Able to prototype in Figma with Once UI with unnatural speed.</>
+          <>Expertise in Java, Spring Framework, and API development with 8+ years of experience in enterprise applications.</>
         ),
         tags: [
-          {
-            name: "Figma",
-            icon: "figma",
-          },
+          { name: "Java", icon: "java" },
+          { name: "Spring", icon: "spring" },
+          { name: "Kotlin", icon: "kotlin" },
+          { name: "Python", icon: "python" },
         ],
-        // optional: leave the array empty if you don't want to display images
-        images: [
-          {
-            src: "/images/projects/project-01/cover-02.jpg",
-            alt: "Project image",
-            width: 16,
-            height: 9,
-          },
-          {
-            src: "/images/projects/project-01/cover-03.jpg",
-            alt: "Project image",
-            width: 16,
-            height: 9,
-          },
-        ],
+        images: [],
       },
       {
-        title: "Next.js",
+        title: "Frontend Development",
         description: (
-          <>Building next gen apps with Next.js + Once UI + Supabase.</>
+          <>Building modern web applications with React, JavaScript, HTML, and CSS.</>
         ),
         tags: [
-          {
-            name: "JavaScript",
-            icon: "javascript",
-          },
-          {
-            name: "Next.js",
-            icon: "nextjs",
-          },
-          {
-            name: "Supabase",
-            icon: "supabase",
-          },
+          { name: "React", icon: "react" },
+          { name: "JavaScript", icon: "javascript" },
+          { name: "HTML", icon: "html5" },
+          { name: "CSS", icon: "css3" },
         ],
-        // optional: leave the array empty if you don't want to display images
-        images: [
-          {
-            src: "/images/projects/project-01/cover-04.jpg",
-            alt: "Project image",
-            width: 16,
-            height: 9,
-          },
+        images: [],
+      },
+      {
+        title: "Database Technologies",
+        description: (
+          <>Proficient in various database systems including Oracle, PostgreSQL, and SQL Server.</>
+        ),
+        tags: [
+          { name: "Oracle", icon: "oracle" },
+          { name: "PostgreSQL", icon: "postgresql" },
+          { name: "MySQL", icon: "mysql" },
         ],
+        images: [],
+      },
+      {
+        title: "Cloud & DevOps",
+        description: (
+          <>AWS cloud-native development with CI/CD pipelines, Docker containerization, and monitoring tools.</>
+        ),
+        tags: [
+          { name: "AWS", icon: "aws" },
+          { name: "Docker", icon: "docker" },
+          { name: "GitHub Actions", icon: "github" },
+          { name: "Linux", icon: "linux" },
+        ],
+        images: [],
       },
     ],
   },
