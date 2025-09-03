@@ -68,7 +68,7 @@ export function ChatWidget() {
         if (done) break;
 
         const chunk = new TextDecoder().decode(value);
-        const lines = chunk.split('\n');
+        const lines = chunk.split('\n').filter(line => line.trim());
 
         for (const line of lines) {
           if (line.startsWith('data: ')) {
@@ -77,14 +77,15 @@ export function ChatWidget() {
 
             try {
               const parsed = JSON.parse(data);
-              if (parsed.type === 'text-delta') {
+              
+              if (parsed.type === 'text-delta' && parsed.delta) {
                 assistantMessage += parsed.delta;
                 setMessages(prev => prev.map(m => 
                   m.id === assistantId ? { ...m, content: assistantMessage } : m
                 ));
               }
             } catch (e) {
-              // Ignore parsing errors
+              // Ignore parsing errors for non-JSON lines
             }
           }
         }
