@@ -189,6 +189,7 @@ export function ChatWidget() {
 
             <Flex gap="s" style={{ display: 'flex', alignItems: 'center' }}>
               <Input
+                id="chat-input"
                 value={inputText}
                 onChange={(e) => setInputText(e.target.value)}
                 onKeyPress={handleKeyPress}
