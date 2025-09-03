@@ -13,7 +13,8 @@ export async function getSecret(parameterName: string): Promise<string> {
     return response.Parameter?.Value || '';
   } catch (error) {
     console.error(`Failed to get parameter ${parameterName}:`, error);
-    throw error;
+    // Fallback to environment variables if Parameter Store fails
+    return '';
   }
 }
 

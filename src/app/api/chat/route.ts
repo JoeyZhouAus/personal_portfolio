@@ -9,33 +9,31 @@ import {
 } from 'ai';
 import { z } from 'zod';
 import { findRelevantContent } from '@/lib/ai/embedding';
+import { getOpenAIKey } from '@/lib/secrets';
 
 export const maxDuration = 30;
 
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    console.log('Received body:', body);
-    
     const { messages } = body;
-    console.log('Messages:', messages);
 
     if (!messages || !Array.isArray(messages)) {
       return new Response('Invalid messages format', { status: 400 });
     }
 
-    console.log('Messages before conversion:', messages);
-    console.log('Type of messages:', typeof messages, Array.isArray(messages));
-    
+    const apiKey = await getOpenAIKey();
+    if (!apiKey) {
+      return new Response('OpenAI API key not found', { status: 500 });
+    }
+
     const modelMessages = messages.map(msg => ({
       role: msg.role,
       content: msg.content
     }));
-    
-    console.log('Model messages:', modelMessages);
 
     const result = streamText({
-      model: openai('gpt-4o'),
+      model: openai('gpt-4o', { apiKey }),
       messages: modelMessages,
       stopWhen: stepCountIs(5),
       system: `You are a helpful assistant for Joey Zhou's portfolio website. You can help visitors learn about Joey's background, skills, projects, and experience.
