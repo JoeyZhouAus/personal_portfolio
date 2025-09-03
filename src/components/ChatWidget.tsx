@@ -117,14 +117,18 @@ export function ChatWidget() {
           }}
         >
           <Flex
-            justifyContent="space-between"
-            alignItems="center"
             padding="m"
             background="brand-medium"
             radius="l"
-            style={{ borderBottomLeftRadius: 0, borderBottomRightRadius: 0 }}
+            style={{ 
+              borderBottomLeftRadius: 0, 
+              borderBottomRightRadius: 0,
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center'
+            }}
           >
-            <Flex alignItems="center" gap="8">
+            <Flex gap="8" style={{ display: 'flex', alignItems: 'center' }}>
               <Text variant="body-default-s" onBackground="brand-medium">🤖 AI Assistant</Text>
             </Flex>
             <Button
@@ -143,7 +147,10 @@ export function ChatWidget() {
                 {messages.map((message) => (
                   <Flex
                     key={message.id}
-                    justifyContent={message.sender === 'user' ? 'flex-end' : 'flex-start'}
+                    style={{ 
+                      display: 'flex',
+                      justifyContent: message.sender === 'user' ? 'flex-end' : 'flex-start'
+                    }}
                   >
                     <Flex
                       direction="column"
@@ -163,12 +170,12 @@ export function ChatWidget() {
                 ))}
                 
                 {isTyping && (
-                  <Flex justifyContent="flex-start">
+                  <Flex style={{ display: 'flex', justifyContent: 'flex-start' }}>
                     <Flex
                       padding="s"
                       radius="m"
                       background="neutral-weak"
-                      alignItems="center"
+                      style={{ display: 'flex', alignItems: 'center' }}
                     >
                       <Text variant="body-default-xs" onBackground="neutral-weak">
                         Typing...
@@ -180,7 +187,7 @@ export function ChatWidget() {
               </Flex>
             </div>
 
-            <Flex gap="s" alignItems="center">
+            <Flex gap="s" style={{ display: 'flex', alignItems: 'center' }}>
               <Input
                 value={inputText}
                 onChange={(e) => setInputText(e.target.value)}
