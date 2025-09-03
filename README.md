@@ -1,91 +1,55 @@
 # Magic Portfolio
 
-Magic Portfolio is a simple, clean, beginner-friendly portfolio template. It supports an MDX-based content system for projects and blog posts, an about / CV page and a gallery.
+A modern portfolio template built with Next.js 15, React 19, and Once UI.
 
-View the demo [here](https://demo.magic-portfolio.com).
+## Tech Stack
 
-![Magic Portfolio](public/images/og/home.jpg)
+- **Framework**: Next.js 15.3.1 with React 19
+- **UI System**: Once UI Core 1.4.27
+- **Styling**: Sass
+- **Content**: MDX with next-mdx-remote
+- **Database**: PostgreSQL with Drizzle ORM
+- **AI Integration**: Vercel AI SDK with OpenAI
+- **Language**: TypeScript
+- **Code Quality**: Biome formatter & linter
 
-## Getting started
+## Quick Start
 
-**1. Clone the repository**
-```
-git clone https://github.com/once-ui-system/magic-portfolio.git
-```
-
-**2. Install dependencies**
-```
+```bash
 npm install
-```
-
-**3. Run dev server**
-```
 npm run dev
 ```
 
-**4. Edit config**
-```
-src/resources/once-ui.config.js
-```
+## Configuration
 
-**5. Edit content**
-```
-src/resources/content.js
-```
+Edit these files to customize your portfolio:
+- `src/resources/once-ui.config.js` - Theme and UI settings
+- `src/resources/content.js` - Personal content and data
 
-**6. Create blog posts / projects**
-```
-Add a new .mdx file to src/app/blog/posts or src/app/work/projects
-```
+## Content Management
 
-Magic Portfolio was built with [Once UI](https://once-ui.com) for [Next.js](https://nextjs.org). It requires Node.js v18.17+.
-
-## Documentation
-
-Docs available at: [docs.once-ui.com](https://docs.once-ui.com/docs/magic-portfolio/quick-start)
+Add new content by creating `.mdx` files in:
+- `src/app/blog/posts/` - Blog posts
+- `src/app/work/projects/` - Portfolio projects
 
 ## Features
 
-### Once UI
-- All tokens, components & features of [Once UI](https://once-ui.com)
+- Responsive design with Once UI components
+- MDX content system with gray-matter frontmatter
+- SEO optimization with auto-generated meta tags
+- Database integration with Drizzle ORM
+- AI-powered features via Vercel AI SDK
+- Gallery and CV pages
+- Social links integration
 
-### SEO
-- Automatic open-graph and X image generation with next/og
-- Automatic schema and metadata generation based on the content file
+## Requirements
 
-### Design
-- Responsive layout optimized for all screen sizes
-- Timeless design without heavy animations and motion
-- Endless customization options through [data attributes](https://once-ui.com/docs/theming)
-
-### Content
-- Render sections conditionally based on the content file
-- Enable or disable pages for blog, work, gallery and about / CV
-- Generate and display social links automatically
-- Set up password protection for URLs
-
-### Localization
-- A localized, earlier version of Magic Portfolio is available with the next-intl library
-- To use localization, switch to the 'i18n' branch
-
-## Creators
-
-Lorant One: [Threads](https://www.threads.net/@lorant.one) / [LinkedIn](https://www.linkedin.com/in/lorant-one/)
-
-## Get involved
-
-- Join the Design Engineers Club on [Discord](https://discord.com/invite/5EyAQ4eNdS) and share your project with us!
-- Deployed your docs? Share it on the [Once UI Hub](https://once-ui.com/hub) too! We feature our favorite apps on our landing page.
+Node.js v18.17+
 
 ## License
 
-Distributed under the CC BY-NC 4.0 License.
-- Attribution is required.
-- Commercial usage is not allowed.
-- You can extend the license to [Dopler CC](https://dopler.app/license) by purchasing a [Once UI Pro](https://once-ui.com/pricing) license.
+CC BY-NC 4.0 - Attribution required, no commercial use.
 
-See `LICENSE.txt` for more information.
+---
 
-## Deploy with Vercel
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fonce-ui-system%2Fmagic-portfolio&project-name=portfolio&repository-name=portfolio&redirect-url=https%3A%2F%2Fgithub.com%2Fonce-ui-system%2Fmagic-portfolio&demo-title=Magic%20Portfolio&demo-description=Showcase%20your%20designers%20or%20developer%20portfolio&demo-url=https%3A%2F%2Fdemo.magic-portfolio.com&demo-image=%2F%2Fraw.githubusercontent.com%2Fonce-ui-system%2Fmagic-portfolio%2Fmain%2Fpublic%2Fimages%2Fog%2Fhome.jpg)
+Built with [Once UI](https://once-ui.com) • [Documentation](https://docs.once-ui.com/docs/magic-portfolio/quick-start)
