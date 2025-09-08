@@ -15,7 +15,7 @@
     "@mdx-js/loader": "^3.1.0",
     "@next/mdx": "^15.3.1",
     "@once-ui-system/core": "^1.4.27",
-    "ai": "^5.0.30",
+    "ai": "^5.0.35",
     "classnames": "^2.5.1",
     "cookie": "^1.0.2",
     "drizzle-orm": "^0.44.5",
